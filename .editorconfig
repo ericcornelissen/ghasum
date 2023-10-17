@@ -1,0 +1,22 @@
+# Check out EditorConfig at: https://editorconfig.org
+
+root=true
+
+[*]
+charset=utf-8
+insert_final_newline=true
+max_line_length=100
+trim_trailing_whitespace=true
+
+[*.go]
+indent_size=2
+indent_style=tab
+
+[*.md]
+indent_size=unset
+indent_style=space
+
+[LICENSE]
+indent_size=unset
+indent_style=space
+max_line_length=80

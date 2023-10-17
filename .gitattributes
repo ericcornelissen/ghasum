@@ -1,0 +1,4 @@
+* text=auto
+
+# don't diff machine generated files
+go.sum -diff
