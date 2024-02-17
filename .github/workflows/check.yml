@@ -1,0 +1,96 @@
+name: Check
+on:
+  pull_request: ~
+  push:
+    branches:
+    - main
+
+permissions: read-all
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Build binary
+      run: go run tasks.go build
+  dogfeed:
+    name: Dogfeed
+    runs-on: ubuntu-22.04
+    needs:
+    - test
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Uninitialize ghasum
+      run: rm -f .github/workflows/gha.sum
+    - name: Run on this repository
+      run: |
+        go run ./cmd/ghasum init
+        go run ./cmd/ghasum verify
+  format:
+    name: Format
+    runs-on: ubuntu-22.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Check source code formatting
+      run: go run tasks.go format-check
+  reproducible:
+    name: Reproducible build
+    runs-on: ubuntu-22.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Check reproducibility
+      run: go run tasks.go reproducible
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Run tests
+      run: go run tasks.go coverage
+  vet:
+    name: Vet
+    runs-on: ubuntu-22.04
+    needs:
+    - build
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Vet source code
+      run: go run tasks.go vet

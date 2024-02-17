@@ -1,0 +1,10 @@
+# Unknown command
+! exec ghasum cache this-is-definitely-not-a-real-command
+! stdout .
+stderr 'unknown command "this-is-definitely-not-a-real-command"'
+stderr 'ghasum help cache'
+
+# Too many commands
+! exec ghasum cache clear command2
+! stdout .
+stderr 'only one command can be run at the time'

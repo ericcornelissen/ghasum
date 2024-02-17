@@ -1,0 +1,12 @@
+exec ghasum help update
+cp stdout help.txt
+
+# Unknown flag
+! exec ghasum update -this-is-definitely-not-a-real-flag
+cmp stdout help.txt
+stderr '-this-is-definitely-not-a-real-flag'
+
+# Too many targets
+! exec ghasum update target1 target2
+cmp stdout help.txt
+! stderr .

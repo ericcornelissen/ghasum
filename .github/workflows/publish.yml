@@ -1,0 +1,34 @@
+name: Publish
+on:
+  push:
+    tags:
+    - v[0-9]+.[0-9]+.[0-9]+
+
+permissions: read-all
+
+jobs:
+  github-release:
+    name: GitHub Release
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write # To create a GitHub Release
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Get release version
+      id: version
+      shell: bash
+      run: echo "value=${GITHUB_REF#refs/tags/}" >>"${GITHUB_OUTPUT}"
+    - name: Compile
+      run: go run tasks.go build-all
+    - name: Create GitHub release
+      uses: ncipollo/release-action@v1.14.0
+      with:
+        tag: ${{ steps.version.outputs.value }}
+        name: Release ${{ steps.version.outputs.value }}
+        body: ${{ steps.version.outputs.value }}
+        artifacts: ./_compiled/*

@@ -1,0 +1,61 @@
+# Checksum mismatch
+! exec ghasum verify -cache .cache/ mismatch/
+stdout .
+! stdout 'Ok'
+! stderr .
+
+# Checksum missing
+! exec ghasum verify -cache .cache/ missing/
+stdout .
+! stdout 'Ok'
+! stderr .
+
+-- mismatch/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4 xCHyD2IBscJ1q4pfZ3pVXntv0HgGM8tQrG2h3ZHQeuk=
+actions/setup-go@v5 /ChzMZC1jsCd/aTotskAS7hl1cX9/M5XsV7mJHCMuME=
+-- mismatch/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- missing/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4 NQDx6JqrrKyfeOkbY1jy5XFTgfP3P/r9G9l17ENtfBA=
+-- missing/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- .cache/actions/checkout/v4/.keep --
+This file exist to avoid fetching "actions/checkout@v4" and give the Action a
+unique checksum.
+-- .cache/actions/setup-go/v5/.keep --
+This file exists to avoid fetching "actions/setup-go@v5" and give the Action a
+unique checksum.

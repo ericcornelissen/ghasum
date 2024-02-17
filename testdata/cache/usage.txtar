@@ -1,0 +1,12 @@
+exec ghasum help cache
+cp stdout help.txt
+
+# Unknown flag
+! exec ghasum cache -this-is-definitely-not-a-real-flag
+cmp stdout help.txt
+stderr '-this-is-definitely-not-a-real-flag'
+
+# Too few commands
+! exec ghasum cache
+cmp stdout help.txt
+! stderr .

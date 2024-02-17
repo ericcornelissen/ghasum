@@ -1,0 +1,12 @@
+exec ghasum help
+cp stdout help.txt
+
+# No command
+exec ghasum
+cmp stdout help.txt
+! stderr .
+
+# Unknown command
+! exec ghasum this-is-definitely-not-a-real-command
+cmp stdout help.txt
+! stderr .

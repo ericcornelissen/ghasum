@@ -1,3 +1,5 @@
+# Configuration file for git (https://git-scm.com/docs/gitattributes)
+
 * text=auto
 
 # don't diff machine generated files

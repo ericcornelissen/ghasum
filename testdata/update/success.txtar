@@ -1,0 +1,84 @@
+# Update unnecessary
+cmp unchanged/.github/workflows/gha.sum want/gha.sum
+
+exec ghasum update -cache .cache/ unchanged/
+stdout 'Ok'
+! stderr .
+cmp unchanged/.github/workflows/gha.sum want/gha.sum
+
+# Update necessary
+! cmp changed/.github/workflows/gha.sum want/gha.sum
+
+exec ghasum update -cache .cache/ changed/
+stdout 'Ok'
+! stderr .
+cmp changed/.github/workflows/gha.sum want/gha.sum
+
+-- want/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- unchanged/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- unchanged/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- changed/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@main PKruFKnotZi8RQ196H3R7c5bgw9+mfI7BN/h0A7XiV8=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- changed/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- .cache/actions/checkout/main/.keep --
+This file exist to avoid fetching "actions/checkout@main" and give the Action a
+unique checksum.
+-- .cache/actions/checkout/v4.1.1/.keep --
+This file exist to avoid fetching "actions/checkout@v4.1.1" and give the Action
+a unique checksum.
+-- .cache/actions/setup-go/v5.0.0/.keep --
+This file exists to avoid fetching "actions/setup-go@v5.0.0" and give the Action
+a unique checksum.
+-- .cache/golangci/golangci-lint-action/3a91952/.keep --
+This file exist to avoid fetching "golangci/golangci-lint-action@3a91952" and
+give the Action a unique checksum.

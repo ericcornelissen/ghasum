@@ -1,0 +1,30 @@
+name: Audit
+on:
+  pull_request:
+    paths:
+    - '**/*.go'
+    - .github/workflows/audit.yml
+    - go.mod
+    - go.sum
+  push:
+    branches:
+    - main
+  schedule:
+  - cron: 0 2 * * *
+  workflow_dispatch: ~
+
+permissions: read-all
+
+jobs:
+  vulnerabilities:
+    name: Vulnerabilities
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Audit
+      run: go run tasks.go audit

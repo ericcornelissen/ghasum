@@ -1,0 +1,28 @@
+name: CodeQL
+on:
+  pull_request: ~
+  push:
+    branches:
+    - main
+
+permissions: read-all
+
+jobs:
+  go:
+    name: Go
+    runs-on: ubuntu-22.04
+    permissions:
+      security-events: write # To upload CodeQL results
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3.24.3
+      with:
+        languages: go
+    - name: Perform CodeQL analysis
+      uses: github/codeql-action/analyze@v3.24.3

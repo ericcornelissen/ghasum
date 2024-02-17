@@ -1,0 +1,29 @@
+# Initialized repo
+! exec ghasum init initialized/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'ghasum is already initialized'
+
+-- initialized/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@main PKruFKnotZi8RQ196H3R7c5bgw9+mfI7BN/h0A7XiV8=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- initialized/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+    - name: This step does not use an action
+      run: Echo 'hello world!'

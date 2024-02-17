@@ -1,0 +1,30 @@
+# Clear - cache directory exists
+exec ghasum cache -cache .cache/ clear
+stdout 'Ok'
+! stderr .
+! exists .cache/
+
+# Clear - cache directory does not exist
+exec ghasum cache -cache .does-not-exist/ clear
+stdout 'Ok'
+! stderr .
+! exists .does-not-exist/
+
+# Path - no path specified
+exec ghasum cache path
+! stdout 'Ok'
+stdout .
+! stderr .
+
+# Path - path specified
+exec ghasum cache -cache .cache/ path
+! stdout 'Ok'
+stdout .cache/
+! stderr .
+
+-- .cache/actions/checkout/v4/.keep --
+This file exist to avoid fetching "actions/checkout@v4" and give the Action a
+unique checksum.
+-- .cache/actions/setup-go/v5/.keep --
+This file exists to avoid fetching "actions/setup-go@v5" and give the Action a
+unique checksum.

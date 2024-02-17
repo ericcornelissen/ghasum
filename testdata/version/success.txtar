@@ -1,0 +1,4 @@
+# Program version
+exec ghasum version
+stdout .
+! stderr .

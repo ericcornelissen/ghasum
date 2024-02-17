@@ -1,0 +1,61 @@
+cd target
+
+# Workflow: init -> verify
+exec ghasum init -cache ../.cache
+exec ghasum verify -cache ../.cache
+
+# Workflow: update -> verify
+mv updated-workflow.yml .github/workflows/workflow.yml
+exec ghasum update -cache ../.cache
+exec ghasum verify -cache ../.cache
+
+-- target/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@main
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- target/updated-workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- .cache/actions/checkout/main/.keep --
+This file exist to avoid fetching "actions/checkout@main" and give the Action a
+unique checksum.
+-- .cache/actions/checkout/v4.1.1/.keep --
+This file exist to avoid fetching "actions/checkout@v4.1.1" and give the Action
+a unique checksum.
+-- .cache/actions/setup-go/v5.0.0/.keep --
+This file exists to avoid fetching "actions/setup-go@v5.0.0" and give the Action
+a unique checksum.
+-- .cache/golangci/golangci-lint-action/3a91952/.keep --
+This file exist to avoid fetching "golangci/golangci-lint-action@3a91952" and
+give the Action a unique checksum.

@@ -1,4 +1,9 @@
-gha.sum
+# Ignore file for git (https://git-scm.com/docs/gitignore)
+
+/_compiled/
+/cover.html
+/cover.out
+/ghasum*
 
 ## IDEs
 .idea/

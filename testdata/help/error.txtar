@@ -1,0 +1,10 @@
+# Unknown command
+! exec ghasum help this-is-definitely-not-a-real-command
+! stdout .
+stderr 'unknown command "this-is-definitely-not-a-real-command"'
+stderr 'ghasum help'
+
+# Too many commands
+! exec ghasum help command1 command2
+! stdout .
+stderr 'you can ask help for only one command at the time'
