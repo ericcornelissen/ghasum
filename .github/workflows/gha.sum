@@ -2,5 +2,5 @@ version 1
 
 actions/checkout@v4.1.1 Xl8z/l21IIpcBDsjpnq7jsBPk/RY26RwvDVL8FrajmE=
 actions/setup-go@v5.0.0 lSvPPozeojJimtMLZ7cX1J/h8r1i30yGoTYQbst/jA4=
-github/codeql-action@v3.24.3 GLS8dPEK5utIAgML5u2KUEdc7VhRnelkSnA8wJmaYHk=
+github/codeql-action@v3.24.4 asqlcydEXK2eTSQxPZ/HKlfqqE/fxrokshEDXtefChk=
 ncipollo/release-action@v1.14.0 +JAIlT/RB99JgfxlDrAcAdBnaKX4y8hyFWnHc4j7tfM=
