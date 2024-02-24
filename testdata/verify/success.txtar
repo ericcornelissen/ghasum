@@ -1,10 +1,20 @@
-# Checksums match exactly
+# Checksums match exactly - Repo
 exec ghasum verify -cache .cache/ up-to-date/
 stdout 'Ok'
 ! stderr .
 
-# Redundant checksum stored
+# Checksums match exactly - Workflow
+exec ghasum verify -cache .cache/ up-to-date/.github/workflows/workflow.yml
+stdout 'Ok'
+! stderr .
+
+# Redundant checksum stored - Repo
 exec ghasum verify -cache .cache/ redundant/
+stdout 'Ok'
+! stderr .
+
+# Redundant checksum stored - Workflow
+exec ghasum verify -cache .cache/ redundant/.github/workflows/workflow.yml
 stdout 'Ok'
 ! stderr .
 

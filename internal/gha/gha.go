@@ -37,8 +37,8 @@ type GitHubAction struct {
 // WorkflowsPath is the relative path to the GitHub Actions workflow directory.
 var WorkflowsPath = path.Join(".github", "workflows")
 
-// RepoActions extracts the GitHub RepoActions used in the repository at the
-// given file system hierarchy.
+// RepoActions extracts the GitHub Actions used in the repository at the given
+// file system hierarchy.
 func RepoActions(repo fs.FS) ([]GitHubAction, error) {
 	rawWorkflows, err := workflowsInRepo(repo)
 	if err != nil {
@@ -56,6 +56,21 @@ func RepoActions(repo fs.FS) ([]GitHubAction, error) {
 	}
 
 	actions, err := actionsInWorkflows(workflows)
+	if err != nil {
+		return nil, err
+	}
+
+	return actions, nil
+}
+
+// WorkflowActions extracts the GitHub Actions used in the provided workflow.
+func WorkflowActions(rawWorkflow []byte) ([]GitHubAction, error) {
+	w, err := parseWorkflow(rawWorkflow)
+	if err != nil {
+		return nil, err
+	}
+
+	actions, err := actionsInWorkflows([]workflow{w})
 	if err != nil {
 		return nil, err
 	}

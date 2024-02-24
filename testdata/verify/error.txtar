@@ -1,15 +1,42 @@
-# Repo without actions
+# Repo that doesn't use GitHub Actions
 ! exec ghasum verify no-actions/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
-# Uninitialized repo with Actions
+# Uninitialized repo that uses GitHub Actions
 ! exec ghasum verify uninitialized/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
+# Directory not found
+! exec ghasum verify directory-not-found/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'no such file or directory'
+
+# Workflow not found
+! exec ghasum verify initialized/.github/workflows/not-found.yml
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'no such file or directory'
+
+-- initialized/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@main PKruFKnotZi8RQ196H3R7c5bgw9+mfI7BN/h0A7XiV8=
+-- initialized/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@main
 -- no-actions/.keep --
 This file exists to create a repo that does not use Github Actions.
 -- uninitialized/.github/workflows/workflow.yml --

@@ -1,11 +1,23 @@
-# Checksum mismatch
+# Checksum mismatch - Repo
 ! exec ghasum verify -cache .cache/ mismatch/
 stdout .
 ! stdout 'Ok'
 ! stderr .
 
-# Checksum missing
+# Checksum mismatch - Workflow
+! exec ghasum verify -cache .cache/ mismatch/.github/workflows/workflow.yml
+stdout .
+! stdout 'Ok'
+! stderr .
+
+# Checksum missing - Repo
 ! exec ghasum verify -cache .cache/ missing/
+stdout .
+! stdout 'Ok'
+! stderr .
+
+# Checksum missing - Workflow
+! exec ghasum verify -cache .cache/ missing/.github/workflows/workflow.yml
 stdout .
 ! stdout 'Ok'
 ! stderr .
@@ -13,7 +25,7 @@ stdout .
 -- mismatch/.github/workflows/gha.sum --
 version 1
 
-actions/checkout@v4 xCHyD2IBscJ1q4pfZ3pVXntv0HgGM8tQrG2h3ZHQeuk=
+actions/checkout@v4 oJp2lqI5zRjHTtu2vQ9/rfcqiYqRAnhqMjwnw/ss4x0=
 actions/setup-go@v5 /ChzMZC1jsCd/aTotskAS7hl1cX9/M5XsV7mJHCMuME=
 -- mismatch/.github/workflows/workflow.yml --
 name: Example workflow
@@ -35,7 +47,7 @@ jobs:
 -- missing/.github/workflows/gha.sum --
 version 1
 
-actions/checkout@v4 NQDx6JqrrKyfeOkbY1jy5XFTgfP3P/r9G9l17ENtfBA=
+actions/checkout@v4 oJp2lqI5zRjHTtu2vQ9/rfcqiYqRAnhqMjwnw/ss4x0=
 -- missing/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]
