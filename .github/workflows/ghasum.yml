@@ -1,0 +1,22 @@
+name: ghasum
+on:
+  pull_request: ~
+  push:
+    branches:
+    - main
+
+permissions: read-all
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: Verify checksums
+      run: go run ./cmd/ghasum verify -cache /home/runner/work/_actions
