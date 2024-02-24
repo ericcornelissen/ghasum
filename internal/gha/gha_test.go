@@ -15,6 +15,7 @@
 package gha
 
 import (
+	"fmt"
 	"slices"
 	"testing"
 
@@ -142,5 +143,58 @@ func TestRealisticRepository(t *testing.T) {
 		if !slices.Contains(got, want) {
 			t.Errorf("Wanted value missing %v", want)
 		}
+	}
+}
+
+func TestWorkflowActions(t *testing.T) {
+	t.Parallel()
+
+	type TestCase struct {
+		workflow []byte
+		wantErr  bool
+	}
+
+	testCases := []TestCase{
+		{
+			workflow: []byte(workflowWithNoJobs),
+			wantErr:  false,
+		},
+		{
+			workflow: []byte(workflowWithJobNoSteps),
+			wantErr:  false,
+		},
+		{
+			workflow: []byte(workflowWithJobWithSteps),
+			wantErr:  false,
+		},
+		{
+			workflow: []byte(workflowWithJobsWithSteps),
+			wantErr:  false,
+		},
+		{
+			workflow: []byte(workflowWithNestedActions),
+			wantErr:  false,
+		},
+		{
+			workflow: []byte(workflowWithSyntaxError),
+			wantErr:  true,
+		},
+		{
+			workflow: []byte(workflowWithInvalidUses),
+			wantErr:  true,
+		},
+	}
+
+	for i, tc := range testCases {
+		t.Run(fmt.Sprintf("#%d", i), func(t *testing.T) {
+			t.Parallel()
+
+			_, err := WorkflowActions(tc.workflow)
+			if err == nil && tc.wantErr {
+				t.Error("Unexpected success")
+			} else if err != nil && !tc.wantErr {
+				t.Error("Unexpected failure")
+			}
+		})
 	}
 }

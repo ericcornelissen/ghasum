@@ -38,6 +38,11 @@ type (
 		// non-read file system operation.
 		Path string
 
+		// Workflow is the file path (relative to Path) of the workflow that is the
+		// subject of the operation. If this has the zero value all workflows in the
+		// Repo will collectively be the subject of the operation instead.
+		Workflow string
+
 		// Cache is the cache that should be used for the operation.
 		Cache cache.Cache
 	}
@@ -61,7 +66,12 @@ func Initialize(cfg *Config) error {
 		}
 	}()
 
-	checksums, err := compute(cfg, checksum.BestAlgo)
+	actions, err := find(cfg)
+	if err != nil {
+		return err
+	}
+
+	checksums, err := compute(cfg, actions, checksum.BestAlgo)
 	if err != nil {
 		return err
 	}
@@ -104,7 +114,12 @@ func Update(cfg *Config) error {
 		return err
 	}
 
-	checksums, err := compute(cfg, checksum.BestAlgo)
+	actions, err := find(cfg)
+	if err != nil {
+		return err
+	}
+
+	checksums, err := compute(cfg, actions, checksum.BestAlgo)
 	if err != nil {
 		return err
 	}
@@ -145,7 +160,12 @@ func Verify(cfg *Config) ([]Problem, error) {
 		return nil, err
 	}
 
-	fresh, err := compute(cfg, checksum.Sha256)
+	actions, err := find(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	fresh, err := compute(cfg, actions, checksum.Sha256)
 	if err != nil {
 		return nil, err
 	}

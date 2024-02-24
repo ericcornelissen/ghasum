@@ -17,6 +17,7 @@ package ghasum
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path"
@@ -75,12 +76,37 @@ func compare(got, want []sumfile.Entry) []Problem {
 	return cmp(toMap(got), toMap(want))
 }
 
-func compute(cfg *Config, algo checksum.Algo) ([]sumfile.Entry, error) {
-	actions, err := gha.RepoActions(cfg.Repo)
+func find(cfg *Config) ([]gha.GitHubAction, error) {
+	var (
+		actions []gha.GitHubAction
+		err     error
+	)
+
+	if cfg.Workflow == "" {
+		actions, err = gha.RepoActions(cfg.Repo)
+	} else {
+		var (
+			data []byte
+			file fs.File
+		)
+
+		file, err = cfg.Repo.Open(cfg.Workflow)
+		if err == nil {
+			data, err = io.ReadAll(file)
+			if err == nil {
+				actions, err = gha.WorkflowActions(data)
+			}
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("could not find GitHub Actions: %v", err)
 	}
 
+	return actions, nil
+}
+
+func compute(cfg *Config, actions []gha.GitHubAction, algo checksum.Algo) ([]sumfile.Entry, error) {
 	if err := cfg.Cache.Init(); err != nil {
 		return nil, fmt.Errorf("could not initialize cache: %v", err)
 	} else {
