@@ -46,6 +46,7 @@ const (
 
 const (
 	flagNameCache   = "cache"
+	flagNameForce   = "force"
 	flagNameNoCache = "no-cache"
 )
 

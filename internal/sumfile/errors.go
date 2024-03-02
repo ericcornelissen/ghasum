@@ -28,4 +28,8 @@ var (
 
 	// ErrSyntax is the error when a checksum file has a syntax error.
 	ErrSyntax = errors.New("syntax error")
+
+	// ErrVersion is the error when the version is invalid or missing from the
+	// checksum file.
+	ErrVersion = errors.New("version error")
 )

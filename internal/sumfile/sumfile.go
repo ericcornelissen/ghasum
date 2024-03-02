@@ -41,12 +41,13 @@ func Decode(stored string) ([]Entry, error) {
 
 // DecodeVersion parses the given checksum file content to extract the version.
 func DecodeVersion(stored string) (Version, error) {
-	headers, _, err := parseFile(stored)
-	if err != nil {
-		return 0, err
+	headers, _, parseErr := parseFile(stored)
+	version, _ := extractVersion(headers)
+	if parseErr != nil {
+		return version, parseErr
 	}
 
-	return extractVersion(headers)
+	return version, nil
 }
 
 // Encode encodes the given checksums according to the specification of the
@@ -114,7 +115,7 @@ func parseHeaders(lines []string) (map[string]string, error) {
 		j := strings.IndexRune(line, ' ')
 		if j == -1 {
 			err := fmt.Errorf("invalid header on line %d", i)
-			return nil, errors.Join(ErrSyntax, err)
+			return nil, errors.Join(ErrHeaders, err)
 		}
 
 		key := line[0:j]
@@ -129,18 +130,19 @@ func extractVersion(headers map[string]string) (Version, error) {
 	version, ok := headers["version"]
 	if !ok {
 		err := errors.New("version not found")
-		return 0, errors.Join(ErrSyntax, err)
+		return 0, errors.Join(ErrVersion, err)
 	}
 
 	rawVersion, err := strconv.Atoi(version)
 	if err != nil {
 		err := errors.New("version not a number")
-		return 0, errors.Join(ErrSyntax, err)
+		return 0, errors.Join(ErrVersion, err)
 	}
 
 	return Version(rawVersion), nil
 }
 
 func unknownVersion(version Version) error {
-	return fmt.Errorf("unknown version %d", version)
+	err := fmt.Errorf("unknown version %d", version)
+	return errors.Join(ErrVersion, err)
 }

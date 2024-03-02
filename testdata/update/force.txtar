@@ -1,0 +1,112 @@
+# Error in entries
+exec ghasum update -cache .cache/ -force entries/
+stdout 'Ok'
+! stderr .
+cmp entries/.github/workflows/gha.sum .want/gha.sum
+
+# Error in headers
+exec ghasum update -cache .cache/ -force headers/
+stdout 'Ok'
+! stderr .
+cmp headers/.github/workflows/gha.sum .want/gha.sum
+
+# Error in version
+exec ghasum update -cache .cache/ -force nan-version/
+stdout 'Ok'
+! stderr .
+cmp nan-version/.github/workflows/gha.sum .want/gha.sum
+
+# Invalid version
+exec ghasum update -cache .cache/ -force invalid-version/
+stdout 'Ok'
+! stderr .
+cmp invalid-version/.github/workflows/gha.sum .want/gha.sum
+
+# Missing version
+exec ghasum update -cache .cache/ -force no-version/
+stdout 'Ok'
+! stderr .
+cmp no-version/.github/workflows/gha.sum .want/gha.sum
+
+-- entries/.github/workflows/gha.sum --
+version 1
+
+this-action/is-missing@a-checksum
+-- entries/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- headers/.github/workflows/gha.sum --
+invalid-header
+
+actions/checkout@v4.1.0 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
+-- headers/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- invalid-version/.github/workflows/gha.sum --
+version 0
+
+actions/checkout@v4.1.0 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
+-- invalid-version/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- nan-version/.github/workflows/gha.sum --
+version not-a-number
+
+actions/checkout@v4.1.0 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
+-- nan-version/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- no-version/.github/workflows/gha.sum --
+version-header-missing 1
+
+actions/checkout@v4.1.0 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
+-- no-version/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- .cache/actions/checkout/v4.1.1/.keep --
+This file exist to avoid fetching "actions/checkout@v4.1.1" and give the Action
+a unique checksum.
+-- .want/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
