@@ -27,6 +27,7 @@ import (
 func cmdUpdate(argv []string) error {
 	var (
 		flags       = flag.NewFlagSet(cmdNameUpdate, flag.ContinueOnError)
+		flagForce   = flags.Bool(flagNameForce, false, "")
 		flagCache   = flags.String(flagNameCache, "", "")
 		flagNoCache = flags.Bool(flagNameNoCache, false, "")
 	)
@@ -57,7 +58,7 @@ func cmdUpdate(argv []string) error {
 		Cache: c,
 	}
 
-	if err := ghasum.Update(&cfg); err != nil {
+	if err := ghasum.Update(&cfg, *flagForce); err != nil {
 		return errors.Join(errUnexpected, err)
 	}
 
@@ -79,6 +80,9 @@ The available flags are:
         The location of the cache directory. This is where ghasum stores and
         looks up repositories it needs.
         Defaults to a directory named .ghasum in the user's home directory.
+    -force
+        Force updating the gha.sum file, ignoring errors and fixing them in the
+        process.
     -no-cache
         Disable the use of the cache. Makes the -cache flag ineffective.`
 }

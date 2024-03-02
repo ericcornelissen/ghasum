@@ -37,11 +37,18 @@ by another process leading to an inconsistent state).
 
 If the file lock is obtained, the process shall first read it and parse it
 completely to extract the sumfile version. If this fails the process shall exit
-immediately. Else it shall recompute checksums for all actions used in the
-repository (see [Computing Checksums]) using the best available hashing
-algorithm. It shall then store them in a sumfile (see [Storing Checksums]) using
-the same sumfile version as before and releases the lock. As a consequence, this
-adds missing and removes redundant checksums from the sumfile.
+immediately unless the `-force` flag is used (see details below). Else it shall
+recompute checksums for all actions used in the repository (see [Computing
+Checksums]) using the best available hashing algorithm. It shall then store them
+in a sumfile (see [Storing Checksums]) using the same sumfile version as before
+and releases the lock. As a consequence, this adds missing and removes redundant
+checksums from the sumfile.
+
+With the `-force` flag the process will ignore errors in the sumfile and fix
+those while updating. If the sumfile version can still be determined from
+sumfile it will be used, otherwise the latest available version is used instead.
+This option is disabled by default to avoid unknowingly fixing syntax errors in
+a sumfile, which is an important fact to know about from a security perspective.
 
 This process does not verify any of the checksums currently in the sumfile.
 

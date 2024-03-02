@@ -94,7 +94,7 @@ func Initialize(cfg *Config) error {
 
 // Update will update the ghasum checksums for the repository specified in the
 // given configuration.
-func Update(cfg *Config) error {
+func Update(cfg *Config, force bool) error {
 	file, err := open(cfg.Path)
 	if err != nil {
 		return err
@@ -111,7 +111,13 @@ func Update(cfg *Config) error {
 
 	version, err := version(raw)
 	if err != nil {
-		return err
+		if !force {
+			return errors.Join(ErrSumfileRead, err)
+		}
+
+		if errors.Is(err, sumfile.ErrHeaders) || errors.Is(err, sumfile.ErrVersion) {
+			version = sumfile.VersionLatest
+		}
 	}
 
 	actions, err := find(cfg)
