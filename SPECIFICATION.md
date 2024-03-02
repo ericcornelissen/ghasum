@@ -36,7 +36,7 @@ not possible to process shall exit immediately (it means the file may be edited
 by another process leading to an inconsistent state).
 
 If the file lock is obtained, the process shall first read it and parse it
-partially to extract the sumfile version. If this fails the process shall exit
+completely to extract the sumfile version. If this fails the process shall exit
 immediately. Else it shall recompute checksums for all actions used in the
 repository (see [Computing Checksums]) using the best available hashing
 algorithm. It shall then store them in a sumfile (see [Storing Checksums]) using

@@ -35,48 +35,13 @@ type Entry struct {
 // if there is a syntax error in the checksum file or if the checksum file is
 // otherwise corrupted (for example multiple checksum directives for one Entry).
 func Decode(stored string) ([]Entry, error) {
-	lines := strings.Split(stored, "\n")
-	headers, err := parseHeaders(lines)
-	if err != nil {
-		return nil, err
-	}
-
-	version, err := extractVersion(headers)
-	if err != nil {
-		return nil, err
-	}
-
-	if lines[len(lines)-1] != "" {
-		err = errors.New("missing final newline")
-		return nil, errors.Join(ErrSyntax, err)
-	}
-
-	content := []string{}
-	if len(lines) > len(headers)+1 {
-		content = lines[len(headers)+1 : len(lines)-1]
-	}
-
-	var checksums []Entry
-	switch version {
-	case Version1:
-		checksums, err = decodeV1(content)
-	default:
-		err = unknownVersion(version)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	return checksums, nil
+	_, entries, err := parseFile(stored)
+	return entries, err
 }
 
 // DecodeVersion parses the given checksum file content to extract the version.
-//
-// This function may succeed even if the checksum file is corrupted.
 func DecodeVersion(stored string) (Version, error) {
-	lines := strings.Split(stored, "\n")
-	headers, err := parseHeaders(lines)
+	headers, _, err := parseFile(stored)
 	if err != nil {
 		return 0, err
 	}
@@ -100,6 +65,43 @@ func Encode(version Version, checksums []Entry) (string, error) {
 	}
 
 	return fmt.Sprintf("version %d\n\n%s", version, encoded), err
+}
+
+func parseFile(stored string) (map[string]string, []Entry, error) {
+	lines := strings.Split(stored, "\n")
+	headers, err := parseHeaders(lines)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	version, err := extractVersion(headers)
+	if err != nil {
+		return headers, nil, err
+	}
+
+	if lines[len(lines)-1] != "" {
+		err = errors.New("missing final newline")
+		return headers, nil, errors.Join(ErrSyntax, err)
+	}
+
+	content := []string{}
+	if len(lines) > len(headers)+1 {
+		content = lines[len(headers)+1 : len(lines)-1]
+	}
+
+	var entries []Entry
+	switch version {
+	case Version1:
+		entries, err = decodeV1(content)
+	default:
+		err = unknownVersion(version)
+	}
+
+	if err != nil {
+		return headers, entries, err
+	}
+
+	return headers, entries, nil
 }
 
 func parseHeaders(lines []string) (map[string]string, error) {
