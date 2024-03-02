@@ -101,6 +101,7 @@ func Update(cfg *Config, force bool) error {
 	}
 
 	defer func() {
+		_ = unlock(cfg.Path)
 		_ = file.Close()
 	}()
 
