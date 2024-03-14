@@ -47,6 +47,10 @@ func cmdUpdate(argv []string) error {
 		return err
 	}
 
+	if _, err = os.Stat(target); err != nil {
+		return errors.Join(errUnexpected, err)
+	}
+
 	c, err := cache.New(*flagCache, *flagNoCache)
 	if err != nil {
 		return errors.Join(errCache, err)

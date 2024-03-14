@@ -1,25 +1,53 @@
-# Invalid sumfile
-! exec ghasum update invalid/
-! stdout 'Ok'
-stderr 'an unexpected error occurred'
-stderr 'could not decode the checksum file'
-
-# Repo without actions
+# Repo without GitHub Actions
 ! exec ghasum update no-actions/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
-# Uninitialized repo with Actions
+# Uninitialized repo with GitHub Actions
 ! exec ghasum update uninitialized/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
--- invalid/.github/workflows/gha.sum --
+# Invalid sumfile
+! exec ghasum update invalid-sumfile/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'could not decode the checksum file'
+
+# Invalid workflow
+! exec ghasum update invalid-workflow/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'could not parse workflow'
+stderr '.github/workflows/workflow.yml'
+
+# Directory not found
+! exec ghasum update directory-not-found/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'no such file or directory'
+
+-- invalid-sumfile/.github/workflows/gha.sum --
 version 1
 
 this-action/is-missing@a-checksum
+-- invalid-workflow/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4 Xl8z/l21IIpcBDsjpnq7jsBPk/RY26RwvDVL8FrajmE=
+-- invalid-workflow/.github/workflows/workflow.yml --
+name: Faulty workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
 -- no-actions/.keep --
 This file exists to create a repo that does not use Github Actions.
 -- uninitialized/.github/workflows/workflow.yml --
