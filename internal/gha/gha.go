@@ -48,9 +48,9 @@ func RepoActions(repo fs.FS) ([]GitHubAction, error) {
 
 	workflows := make([]workflow, len(rawWorkflows))
 	for i, rawWorkflow := range rawWorkflows {
-		w, parseErr := parseWorkflow(rawWorkflow)
+		w, parseErr := parseWorkflow(rawWorkflow.content)
 		if parseErr != nil {
-			return nil, parseErr
+			return nil, fmt.Errorf("%v for %q", parseErr, rawWorkflow.path)
 		}
 
 		workflows[i] = w

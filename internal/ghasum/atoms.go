@@ -92,7 +92,7 @@ func find(cfg *Config) ([]gha.GitHubAction, error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("could not find GitHub Actions: %v", err)
+		return nil, fmt.Errorf("could not get GitHub Actions: %v", err)
 	}
 
 	return actions, nil

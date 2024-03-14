@@ -21,6 +21,11 @@ import (
 	"path"
 )
 
+type workflowFile struct {
+	path    string
+	content []byte
+}
+
 func actionsInWorkflows(workflows []workflow) ([]GitHubAction, error) {
 	unique := make(map[string]GitHubAction, 0)
 	for _, workflow := range workflows {
@@ -52,8 +57,8 @@ func actionsInWorkflows(workflows []workflow) ([]GitHubAction, error) {
 	return actions, nil
 }
 
-func workflowsInRepo(repo fs.FS) ([][]byte, error) {
-	workflows := make([][]byte, 0)
+func workflowsInRepo(repo fs.FS) ([]workflowFile, error) {
+	workflows := make([]workflowFile, 0)
 	walk := func(entryPath string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -76,7 +81,11 @@ func workflowsInRepo(repo fs.FS) ([][]byte, error) {
 			return err
 		}
 
-		workflows = append(workflows, data)
+		workflows = append(workflows, workflowFile{
+			content: data,
+			path:    entryPath,
+		})
+
 		return nil
 	}
 

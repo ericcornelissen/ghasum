@@ -314,7 +314,7 @@ func TestWorkflowsInRepo(t *testing.T) {
 		type TestCase struct {
 			name      string
 			workflows map[string]mockFsEntry
-			want      [][]byte
+			want      []workflowFile
 		}
 
 		testCases := []TestCase{
@@ -325,8 +325,11 @@ func TestWorkflowsInRepo(t *testing.T) {
 						Content: []byte(workflowWithJobsWithSteps),
 					},
 				},
-				want: [][]byte{
-					[]byte(workflowWithJobsWithSteps),
+				want: []workflowFile{
+					{
+						content: []byte(workflowWithJobsWithSteps),
+						path:    ".github/workflows/example.yml",
+					},
 				},
 			},
 			{
@@ -336,8 +339,11 @@ func TestWorkflowsInRepo(t *testing.T) {
 						Content: []byte(workflowWithJobsWithSteps),
 					},
 				},
-				want: [][]byte{
-					[]byte(workflowWithJobsWithSteps),
+				want: []workflowFile{
+					{
+						content: []byte(workflowWithJobsWithSteps),
+						path:    ".github/workflows/example.yaml",
+					},
 				},
 			},
 			{
@@ -347,7 +353,7 @@ func TestWorkflowsInRepo(t *testing.T) {
 						Content: []byte("Hello world!"),
 					},
 				},
-				want: [][]byte{},
+				want: []workflowFile{},
 			},
 			{
 				name: "nested directory",
@@ -359,7 +365,7 @@ func TestWorkflowsInRepo(t *testing.T) {
 						},
 					},
 				},
-				want: [][]byte{},
+				want: []workflowFile{},
 			},
 		}
 
@@ -382,8 +388,12 @@ func TestWorkflowsInRepo(t *testing.T) {
 				}
 
 				for i, got := range got {
-					if want := tc.want[i]; !bytes.Equal(got, want) {
-						t.Errorf("Incorrect workflow %d (got %s, want %s)", i, got, want)
+					if got, want := got.content, tc.want[i].content; !bytes.Equal(got, want) {
+						t.Errorf("Incorrect content for workflow %d (got %s, want %s)", i, got, want)
+					}
+
+					if got, want := got.path, tc.want[i].path; got != want {
+						t.Errorf("Incorrect path for workflow %d (got %s, want %s)", i, got, want)
 					}
 				}
 			})
