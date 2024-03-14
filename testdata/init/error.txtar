@@ -1,8 +1,27 @@
+# Repo without GitHub Actions
+! exec ghasum init no-actions/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'no such file or directory'
+
 # Initialized repo
 ! exec ghasum init initialized/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'ghasum is already initialized'
+
+# Invalid workflow
+! exec ghasum init invalid/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'could not parse workflow'
+stderr '.github/workflows/workflow.yml'
+
+# Directory not found
+! exec ghasum init directory-not-found/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'no such file or directory'
 
 -- initialized/.github/workflows/gha.sum --
 version 1
@@ -20,10 +39,25 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@main
     - name: Install Go
-      uses: actions/setup-go@v5
+      uses: actions/setup-go@v5.0.0
       with:
         go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
     - name: This step does not use an action
       run: Echo 'hello world!'
+-- invalid/.github/workflows/workflow.yml --
+name: Faulty workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+-- no-actions/.keep --
+This file exists to create a repo that does not use Github Actions.
