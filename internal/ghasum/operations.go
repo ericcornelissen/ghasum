@@ -43,6 +43,12 @@ type (
 		// Repo will collectively be the subject of the operation instead.
 		Workflow string
 
+		// Job is the id (also known as key) of the job that is the subject of the
+		// operation. If this has the zero value all jobs in the Workflow will
+		// collectively be the subject of the operation instead. (If Workflow has
+		// the zero value this value is ignored.)
+		Job string
+
 		// Cache is the cache that should be used for the operation.
 		Cache cache.Cache
 	}

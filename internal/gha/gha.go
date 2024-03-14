@@ -15,6 +15,7 @@
 package gha
 
 import (
+	"fmt"
 	"io/fs"
 	"path"
 )
@@ -63,11 +64,48 @@ func RepoActions(repo fs.FS) ([]GitHubAction, error) {
 	return actions, nil
 }
 
-// WorkflowActions extracts the GitHub Actions used in the provided workflow.
-func WorkflowActions(rawWorkflow []byte) ([]GitHubAction, error) {
-	w, err := parseWorkflow(rawWorkflow)
+// WorkflowActions extracts the GitHub Actions used in the specified workflow at
+// the given file system hierarchy.
+func WorkflowActions(repo fs.FS, path string) ([]GitHubAction, error) {
+	data, err := workflowInRepo(repo, path)
 	if err != nil {
 		return nil, err
+	}
+
+	w, err := parseWorkflow(data)
+	if err != nil {
+		return nil, err
+	}
+
+	actions, err := actionsInWorkflows([]workflow{w})
+	if err != nil {
+		return nil, err
+	}
+
+	return actions, nil
+}
+
+// JobActions extracts the GitHub Actions used in the specified job in the
+// specified workflow at the given file system hierarchy.
+func JobActions(repo fs.FS, path, name string) ([]GitHubAction, error) {
+	data, err := workflowInRepo(repo, path)
+	if err != nil {
+		return nil, err
+	}
+
+	w, err := parseWorkflow(data)
+	if err != nil {
+		return nil, err
+	}
+
+	for job := range w.Jobs {
+		if job != name {
+			delete(w.Jobs, job)
+		}
+	}
+
+	if len(w.Jobs) == 0 {
+		return nil, fmt.Errorf("job %q not found in workflow %q", name, path)
 	}
 
 	actions, err := actionsInWorkflows([]workflow{w})
