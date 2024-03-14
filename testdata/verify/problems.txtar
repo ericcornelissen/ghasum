@@ -10,6 +10,12 @@ stdout .
 ! stdout 'Ok'
 ! stderr .
 
+# Checksum mismatch - Job
+! exec ghasum verify -cache .cache/ mismatch/.github/workflows/workflow.yml:example
+stdout .
+! stdout 'Ok'
+! stderr .
+
 # Checksum missing - Repo
 ! exec ghasum verify -cache .cache/ missing/
 stdout .
@@ -18,6 +24,12 @@ stdout .
 
 # Checksum missing - Workflow
 ! exec ghasum verify -cache .cache/ missing/.github/workflows/workflow.yml
+stdout .
+! stdout 'Ok'
+! stderr .
+
+# Checksum missing - Job
+! exec ghasum verify -cache .cache/ missing/.github/workflows/workflow.yml:example
 stdout .
 ! stdout 'Ok'
 ! stderr .

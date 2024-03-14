@@ -22,6 +22,12 @@ stderr 'no such file or directory'
 stderr 'an unexpected error occurred'
 stderr 'no such file or directory'
 
+# Job not found
+! exec ghasum verify initialized/.github/workflows/workflow.yml:not-found
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'job "not-found" not found in workflow ".github/workflows/workflow.yml"'
+
 -- initialized/.github/workflows/gha.sum --
 version 1
 

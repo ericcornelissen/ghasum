@@ -17,7 +17,6 @@ package ghasum
 import (
 	"errors"
 	"fmt"
-	"io"
 	"io/fs"
 	"os"
 	"path"
@@ -85,17 +84,10 @@ func find(cfg *Config) ([]gha.GitHubAction, error) {
 	if cfg.Workflow == "" {
 		actions, err = gha.RepoActions(cfg.Repo)
 	} else {
-		var (
-			data []byte
-			file fs.File
-		)
-
-		file, err = cfg.Repo.Open(cfg.Workflow)
-		if err == nil {
-			data, err = io.ReadAll(file)
-			if err == nil {
-				actions, err = gha.WorkflowActions(data)
-			}
+		if cfg.Job == "" {
+			actions, err = gha.WorkflowActions(cfg.Repo, cfg.Workflow)
+		} else {
+			actions, err = gha.JobActions(cfg.Repo, cfg.Workflow, cfg.Job)
 		}
 	}
 

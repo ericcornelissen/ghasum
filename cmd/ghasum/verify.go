@@ -49,9 +49,10 @@ func cmdVerify(argv []string) error {
 		return err
 	}
 
-	c, err := cache.New(*flagCache, *flagNoCache)
-	if err != nil {
-		return errors.Join(errCache, err)
+	var job string
+	if i := strings.LastIndexByte(target, 0x3A); i >= 0 {
+		job = target[i+1:]
+		target = target[0:i]
 	}
 
 	stat, err := os.Stat(target)
@@ -66,10 +67,16 @@ func cmdVerify(argv []string) error {
 		target = repo
 	}
 
+	c, err := cache.New(*flagCache, *flagNoCache)
+	if err != nil {
+		return errors.Join(errCache, err)
+	}
+
 	cfg := ghasum.Config{
 		Repo:     os.DirFS(target),
 		Path:     target,
 		Workflow: workflow,
+		Job:      job,
 		Cache:    c,
 	}
 
@@ -97,15 +104,26 @@ func helpVerify() string {
 
 Verify the Actions in the target against the stored checksums. If no target is
 provided it will default to the current working directory. If the checksums do
-not match this command will error with a non-zero exit code.
+not match this command will error with a non-zero exit code. If ghasum is not
+yet initialized this command errors (see "ghasum help init").
 
 The target can be either a directory or a file. If it is a directory it must be
-the root of a repository (that is, it should contain the .github directory). In
-this case checksums will be verified for every workflow in the repository. If it
-is a file it must be a workflow file in a repository. In this case checksums
-will be verified only for the given workflow.
+the root of a repository (that is, it should contain the .github directory). For
+example:
 
-If ghasum is not yet initialized this command errors (see "ghasum help init").
+    ghasum verify my-project
+
+In this case checksums will be verified for every workflow in the repository. If
+it is a file it must be a workflow file in a repository. For example:
+
+    ghasum verify my-project/.github/workflows/workflow.yml
+
+In this case checksums will be verified for all jobs in the given workflow. If
+it is a file it may specify a job by using a ":job" suffix. For example:
+
+    ghasum verify my-project/.github/workflows/workflow.yml:job-key
+
+In this case checksums will be verified only for the given job in the workflow.
 
 The available flags are:
 

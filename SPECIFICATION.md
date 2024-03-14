@@ -59,13 +59,19 @@ error.
 
 If the checksum file exists the process shall read and parse it fully. If this
 fails the process shall exit immediately. Else it shall recompute the checksums
-(see [Computing Checksums]) for all actions in the repository using the same
-hashing algorithm as was used for the stored checksums. It shall then compare
-the computed checksums against the stored checksums.
+(see [Computing Checksums]) for all actions in the target using the same hashing
+algorithm as was used for the stored checksums. It shall compare the computed
+checksums against the stored checksums.
 
 If any of the checksums does not match or is missing the process shall exit with
 a non-zero exit code, for usability all values should be compared (and all
 mismatches reported) before exiting.
+
+The "target" can be one of a: a repository, a workflow, or a job. If the target
+is a repository, all actions used in all jobs in all workflows in the repository
+will be considered. If the target is a workflow, only actions used in all jobs
+in the workflow will be considered. If the target is a job, only actions used in
+the job will be considered.
 
 Redundant checksums are ignored by this process.
 

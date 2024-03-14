@@ -71,12 +71,11 @@ func workflowsInRepo(repo fs.FS) ([][]byte, error) {
 			return nil
 		}
 
-		file, err := repo.Open(entryPath)
+		data, err := workflowInRepo(repo, entryPath)
 		if err != nil {
-			return fmt.Errorf("could not open workflow at %q: %v", entryPath, err)
+			return err
 		}
 
-		data, _ := io.ReadAll(file)
 		workflows = append(workflows, data)
 		return nil
 	}
@@ -86,4 +85,14 @@ func workflowsInRepo(repo fs.FS) ([][]byte, error) {
 	}
 
 	return workflows, nil
+}
+
+func workflowInRepo(repo fs.FS, path string) ([]byte, error) {
+	file, err := repo.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("could not open workflow at %q: %v", path, err)
+	}
+
+	data, _ := io.ReadAll(file)
+	return data, nil
 }
