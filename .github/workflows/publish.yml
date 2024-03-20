@@ -19,6 +19,13 @@ jobs:
       uses: actions/setup-go@v5.0.0
       with:
         go-version-file: go.mod
+    - name: Verify action checksums
+      env:
+        JOB: ${{ github.job }}
+        WORKFLOW: ${{ github.workflow_ref }}
+      run: |
+        WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
     - name: Get release version
       id: version
       shell: bash
