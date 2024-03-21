@@ -27,8 +27,7 @@ func decodeV1(lines []string) ([]Entry, error) {
 		// split "line" into "id[@id..]" "sum"
 		j := strings.IndexRune(line, ' ')
 		if j <= 0 || j >= len(line)-1 {
-			err := fmt.Errorf("syntax error on line %d", i+2)
-			return nil, errors.Join(ErrCorrupted, err)
+			return nil, fmt.Errorf("%v on line %d", ErrSyntax, i+3)
 		}
 
 		entries[i] = Entry{
@@ -37,16 +36,16 @@ func decodeV1(lines []string) ([]Entry, error) {
 		}
 	}
 
-	if !validV1(entries) {
-		return nil, ErrInvalid
+	if err := validV1(entries); err != nil {
+		return nil, errors.Join(ErrCorrupted, err)
 	}
 
 	return entries, nil
 }
 
 func encodeV1(entries []Entry) (string, error) {
-	if !validV1(entries) {
-		return "", ErrInvalid
+	if err := validV1(entries); err != nil {
+		return "", errors.Join(ErrCorrupted, err)
 	}
 
 	var sb strings.Builder
@@ -71,20 +70,24 @@ func encodeV1(entries []Entry) (string, error) {
 	return strings.Join(lines, ""), nil
 }
 
-func validV1(entries []Entry) bool {
-	if hasDuplicates(entries) || hasMissing(entries) {
-		return false
+func validV1(entries []Entry) error {
+	if hasDuplicates(entries) {
+		return ErrDuplicate
+	}
+
+	if hasMissing(entries) {
+		return ErrMissing
 	}
 
 	for _, entry := range entries {
 		if strings.ContainsAny(entry.Checksum, "\n ") {
-			return false
+			return ErrSyntax
 		}
 
 		if strings.ContainsAny(strings.Join(entry.ID, ""), "\n @") {
-			return false
+			return ErrSyntax
 		}
 	}
 
-	return true
+	return nil
 }

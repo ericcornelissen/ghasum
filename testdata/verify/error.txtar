@@ -10,11 +10,18 @@ stderr 'ghasum has not yet been initialized'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
-# Invalid sumfile
-! exec ghasum verify invalid-sumfile/
+# Sumfile with syntax error
+! exec ghasum verify sumfile-syntax/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
-stderr 'could not decode the checksum file'
+stderr 'syntax error on line 3'
+
+# Sumfile with duplicate entries
+! exec ghasum verify sumfile-duplicate/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'checksums are corrupted'
+stderr 'duplicate entry found'
 
 # Invalid workflow
 ! exec ghasum verify invalid-workflow/
@@ -62,10 +69,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
--- invalid-sumfile/.github/workflows/gha.sum --
-version 1
-
-this-action/is-missing@a-checksum
 -- invalid-workflow/.github/workflows/gha.sum --
 version 1
 
@@ -98,6 +101,15 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@not-cached
+-- sumfile-duplicate/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4 rfcqiYqRAnhqMjwnw/oJp2lqI5zRjHTtu2vQ9/ss4x0=
+actions/checkout@v4 oJp2lqI5zRjHTtu2vQ9/rfcqiYqRAnhqMjwnw/ss4x0=
+-- sumfile-syntax/.github/workflows/gha.sum --
+version 1
+
+this-action/is-missing@a-checksum
 -- uninitialized/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]

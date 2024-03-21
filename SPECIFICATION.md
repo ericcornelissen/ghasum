@@ -120,6 +120,10 @@ version 1
 <body>
 ```
 
+Every entry in the `<body>` of the sumfile must have a unique identifier. If two
+entries have the same identifier the sumfile must be rejected and the program
+exit with a non-zero exit code.
+
 ### Version 1
 
 Sumfile version 1 expects at least one header, namely `version 1`. Any other

@@ -4,6 +4,12 @@ stdout 'Ok'
 ! stderr .
 cmp entries/.github/workflows/gha.sum .want/gha.sum
 
+# Duplicate entries
+exec ghasum update -cache .cache/ -force duplicate/
+stdout 'Ok'
+! stderr .
+cmp duplicate/.github/workflows/gha.sum .want/gha.sum
+
 # Error in headers
 exec ghasum update -cache .cache/ -force headers/
 stdout 'Ok'
@@ -28,6 +34,22 @@ stdout 'Ok'
 ! stderr .
 cmp no-version/.github/workflows/gha.sum .want/gha.sum
 
+-- duplicate/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
+actions/checkout@v4.1.1 KaJZI=/KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+
+-- duplicate/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
 -- entries/.github/workflows/gha.sum --
 version 1
 

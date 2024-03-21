@@ -20,11 +20,15 @@ var (
 	// ErrCorrupted is the error when a checksum file is corrupted.
 	ErrCorrupted = errors.New("checksums are corrupted")
 
+	// ErrDuplicate is the error when a checksum file contains two entries for the
+	// same identifier.
+	ErrDuplicate = errors.New("duplicate entry found")
+
 	// ErrHeaders is the error for when checksum headers are invalid.
 	ErrHeaders = errors.New("checksum headers are invalid")
 
-	// ErrInvalid is the error for when checksums are invalid.
-	ErrInvalid = errors.New("checksums are invalid")
+	// ErrMissing is the error when an entry is missing an id (part) or checksums.
+	ErrMissing = errors.New("missing id or checksum")
 
 	// ErrSyntax is the error when a checksum file has a syntax error.
 	ErrSyntax = errors.New("syntax error")
