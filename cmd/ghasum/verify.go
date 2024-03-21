@@ -32,6 +32,7 @@ func cmdVerify(argv []string) error {
 		flags       = flag.NewFlagSet(cmdNameVerify, flag.ContinueOnError)
 		flagCache   = flags.String(flagNameCache, "", "")
 		flagNoCache = flags.Bool(flagNameNoCache, false, "")
+		flagOffline = flags.Bool(flagNameOffline, false, "")
 	)
 
 	flags.Usage = func() { fmt.Fprintln(os.Stderr) }
@@ -78,6 +79,7 @@ func cmdVerify(argv []string) error {
 		Workflow: workflow,
 		Job:      job,
 		Cache:    c,
+		Offline:  *flagOffline,
 	}
 
 	problems, err := ghasum.Verify(&cfg)
@@ -132,5 +134,8 @@ The available flags are:
         looks up repositories it needs.
         Defaults to a directory named .ghasum in the user's home directory.
     -no-cache
-        Disable the use of the cache. Makes the -cache flag ineffective.`
+        Disable the use of the cache. Makes the -cache flag ineffective.
+    -offline
+        Run without fetching repositories from the internet, verify exclusively
+        against the cache. If the cache is missing an entry it causes an error.`
 }

@@ -24,7 +24,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Build binary
       run: go run tasks.go build
   dogfeed:
@@ -45,7 +45,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Uninitialize ghasum
       run: rm -f .github/workflows/gha.sum
     - name: Run on this repository
@@ -70,7 +70,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Check source code formatting
       run: go run tasks.go format-check
   reproducible:
@@ -91,7 +91,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Check reproducibility
       run: go run tasks.go reproducible
   test:
@@ -112,7 +112,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Run tests
       run: go run tasks.go coverage
   vet:
@@ -133,6 +133,6 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Vet source code
       run: go run tasks.go vet

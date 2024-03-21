@@ -41,6 +41,12 @@ stderr 'no such file or directory'
 stderr 'an unexpected error occurred'
 stderr 'job "not-found" not found in workflow ".github/workflows/workflow.yml"'
 
+# Offline cache entry missing
+! exec ghasum verify -cache .cache/ -offline not-cached/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'missing ".cache/actions/checkout/not-cached" from cache'
+
 -- initialized/.github/workflows/gha.sum --
 version 1
 
@@ -77,6 +83,21 @@ jobs:
     uses: actions/checkout@v4
 -- no-actions/.keep --
 This file exists to create a repo that does not use Github Actions.
+-- not-cached/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@not-cached b5283HfgB+lTEWTnN3iPEmkOQk+7FBHUMOHw3GjR4M4=
+-- not-cached/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@not-cached
 -- uninitialized/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]

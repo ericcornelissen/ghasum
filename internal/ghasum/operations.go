@@ -51,6 +51,12 @@ type (
 
 		// Cache is the cache that should be used for the operation.
 		Cache cache.Cache
+
+		// Offline sets whether to rely exclusively on the cache or fetch missing
+		// repositories from the internet.
+		//
+		// Only applies to verification.
+		Offline bool
 	}
 
 	// Problem represents an issue detected when verifying ghasum checksums.
