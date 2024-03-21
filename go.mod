@@ -14,7 +14,7 @@ require (
 	github.com/go-critic/go-critic v0.11.2
 	github.com/go-git/go-git/v5 v5.11.0
 	github.com/gordonklaus/ineffassign v0.1.0
-	github.com/jgautheron/goconst v1.7.0
+	github.com/jgautheron/goconst v1.7.1
 	github.com/kisielk/errcheck v1.7.0
 	github.com/kunwardeep/paralleltest v1.0.10
 	github.com/liamg/memoryfs v1.6.0
