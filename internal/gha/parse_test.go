@@ -117,6 +117,18 @@ func TestParseUses(t *testing.T) {
 				want: "invalid uses value",
 			},
 			{
+				in:   "f@o/bar@baz",
+				want: "invalid uses value",
+			},
+			{
+				in:   "foo/b@r@baz",
+				want: "invalid uses value",
+			},
+			{
+				in:   "foo/bar/b@z@ref",
+				want: "invalid uses value",
+			},
+			{
 				in:   "foo@bar",
 				want: "invalid repository in uses",
 			},
@@ -162,16 +174,20 @@ func TestParseUses(t *testing.T) {
 				return true
 			}
 
-			if len(path) > 0 {
-				path = "/" + path
-			}
-
 			repo := fmt.Sprintf("%s/%s", owner, project)
 			if strings.Count(repo, "/") != 1 {
 				return true
 			}
 
-			uses := fmt.Sprintf("%s%s@%s", repo, path, ref)
+			if len(path) > 0 {
+				repo = fmt.Sprintf("%s/%s", repo, path)
+			}
+
+			if strings.ContainsRune(repo, '@') {
+				return true
+			}
+
+			uses := fmt.Sprintf("%s@%s", repo, ref)
 
 			action, err := parseUses(uses)
 			if err != nil {
