@@ -15,7 +15,6 @@
 package sumfile
 
 import (
-	"errors"
 	"fmt"
 	"slices"
 	"strings"
@@ -27,7 +26,7 @@ func TestVersion1(t *testing.T) {
 	t.Parallel()
 
 	correct := func(entries []Entry) bool {
-		if !validV1(entries) {
+		if err := validV1(entries); err != nil {
 			return true
 		}
 
@@ -47,7 +46,7 @@ func TestVersion1(t *testing.T) {
 	}
 
 	decodable := func(entries []Entry) bool {
-		if !validV1(entries) {
+		if err := validV1(entries); err != nil {
 			return true
 		}
 
@@ -65,7 +64,7 @@ func TestVersion1(t *testing.T) {
 	deterministic := func(entries []Entry) bool {
 		got1, err1 := encodeV1(entries)
 		got2, err2 := encodeV1(entries)
-		return got1 == got2 && errors.Is(err1, err2)
+		return got1 == got2 && ((err1 == nil) == (err2 == nil))
 	}
 
 	if err := quick.Check(deterministic, nil); err != nil {
@@ -191,7 +190,7 @@ func TestDecodeV1(t *testing.T) {
 					t.Fatal("Unexpected success")
 				}
 
-				if got, want := err.Error(), fmt.Sprintf("line %d", tc.want); strings.Contains(got, want) {
+				if got, want := err.Error(), fmt.Sprintf("line %d", tc.want); !strings.Contains(got, want) {
 					t.Errorf("Incorrect line number (got %q, want %q)", got, want)
 				}
 			})
