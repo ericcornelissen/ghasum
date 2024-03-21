@@ -50,7 +50,7 @@ func parseUses(uses string) (GitHubAction, error) {
 
 	// split "uses" into "repo"@"ref"
 	i := strings.IndexRune(uses, '@')
-	if i <= 0 || i == len(uses)-1 {
+	if strings.Count(uses, "@") != 1 {
 		return a, errors.New("invalid uses value")
 	}
 
