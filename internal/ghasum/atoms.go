@@ -115,6 +115,10 @@ func compute(cfg *Config, actions []gha.GitHubAction, algo checksum.Algo) ([]sum
 
 		actionDir := path.Join(cfg.Cache.Path(), repo.Owner, repo.Project, repo.Ref)
 		if _, err := os.Stat(actionDir); err != nil {
+			if cfg.Offline {
+				return nil, fmt.Errorf("missing %q from cache", actionDir)
+			}
+
 			err := github.Clone(actionDir, &repo)
 			if err != nil {
 				return nil, fmt.Errorf("clone failed: %v", err)

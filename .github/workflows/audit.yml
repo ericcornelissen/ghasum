@@ -32,6 +32,6 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Audit
       run: go run tasks.go audit

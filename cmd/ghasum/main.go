@@ -48,6 +48,7 @@ const (
 	flagNameCache   = "cache"
 	flagNameForce   = "force"
 	flagNameNoCache = "no-cache"
+	flagNameOffline = "offline"
 )
 
 var (
