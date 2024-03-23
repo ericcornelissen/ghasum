@@ -120,9 +120,9 @@ version 1
 <body>
 ```
 
-Every entry in the `<body>` of the sumfile must have a unique identifier. If two
-entries have the same identifier the sumfile must be rejected and the program
-exit with a non-zero exit code.
+Every header `<name>` and every entry in the `<body>` of the sumfile must have a
+unique name/identifier. If two entries have the same identifier the sumfile must
+be rejected as corrupt and the program exit with a non-zero exit code.
 
 ### Version 1
 

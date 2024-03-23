@@ -114,12 +114,17 @@ func parseHeaders(lines []string) (map[string]string, error) {
 
 		j := strings.IndexRune(line, ' ')
 		if j == -1 {
-			err := fmt.Errorf("invalid header on line %d", i)
+			err := fmt.Errorf("invalid header on line %d", i+1)
 			return nil, errors.Join(ErrHeaders, err)
 		}
 
 		key := line[0:j]
 		value := line[j+1:]
+		if _, ok := headers[key]; ok {
+			err := fmt.Errorf("duplicate header %q on line %d", key, i+1)
+			return nil, errors.Join(ErrHeaders, err)
+		}
+
 		headers[key] = value
 	}
 
