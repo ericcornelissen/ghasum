@@ -183,7 +183,7 @@ func TestParseUses(t *testing.T) {
 				repo = fmt.Sprintf("%s/%s", repo, path)
 			}
 
-			if strings.ContainsRune(repo, '@') {
+			if strings.ContainsRune(repo, '@') || strings.ContainsRune(ref, '@') {
 				return true
 			}
 
