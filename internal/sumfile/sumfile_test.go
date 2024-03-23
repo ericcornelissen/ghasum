@@ -99,6 +99,19 @@ func TestDecodeCorruptFile(t *testing.T) {
 		"not a version",
 		"version 1",
 		`version 1
+version 2
+`,
+		`version 2
+version 1
+`,
+		`version 1
+version 1
+`,
+		`version 1
+duplicate header
+duplicate header
+`,
+		`version 1
 
 duplicate checksum
 duplicate checksum

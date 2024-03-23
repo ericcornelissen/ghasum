@@ -24,8 +24,8 @@ var (
 	// same identifier.
 	ErrDuplicate = errors.New("duplicate entry found")
 
-	// ErrHeaders is the error for when checksum headers are invalid.
-	ErrHeaders = errors.New("checksum headers are invalid")
+	// ErrHeaders is the error for when sumfile headers are invalid.
+	ErrHeaders = errors.New("sumfile headers are invalid")
 
 	// ErrMissing is the error when an entry is missing an id (part) or checksums.
 	ErrMissing = errors.New("missing id or checksum")

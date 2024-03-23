@@ -10,14 +10,28 @@ stderr 'ghasum has not yet been initialized'
 stderr 'an unexpected error occurred'
 stderr 'ghasum has not yet been initialized'
 
-# Sumfile with syntax error
-! exec ghasum verify sumfile-syntax/
+# Sumfile with syntax error in headers
+! exec ghasum verify sumfile-syntax-headers/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'sumfile headers are invalid'
+stderr 'invalid header on line 2'
+
+# Sumfile with syntax error in entries
+! exec ghasum verify sumfile-syntax-entries/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'syntax error on line 3'
 
+# Sumfile with duplicate headers
+! exec ghasum verify sumfile-duplicate-headers/
+! stdout 'Ok'
+stderr 'an unexpected error occurred'
+stderr 'sumfile headers are invalid'
+stderr 'duplicate header "foo" on line 3'
+
 # Sumfile with duplicate entries
-! exec ghasum verify sumfile-duplicate/
+! exec ghasum verify sumfile-duplicate-entries/
 ! stdout 'Ok'
 stderr 'an unexpected error occurred'
 stderr 'checksums are corrupted'
@@ -101,15 +115,22 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@not-cached
--- sumfile-duplicate/.github/workflows/gha.sum --
+-- sumfile-duplicate-entries/.github/workflows/gha.sum --
 version 1
 
 actions/checkout@v4 rfcqiYqRAnhqMjwnw/oJp2lqI5zRjHTtu2vQ9/ss4x0=
 actions/checkout@v4 oJp2lqI5zRjHTtu2vQ9/rfcqiYqRAnhqMjwnw/ss4x0=
--- sumfile-syntax/.github/workflows/gha.sum --
+-- sumfile-duplicate-headers/.github/workflows/gha.sum --
+version 1
+foo bar
+foo bar
+-- sumfile-syntax-entries/.github/workflows/gha.sum --
 version 1
 
 this-action/is-missing@a-checksum
+-- sumfile-syntax-headers/.github/workflows/gha.sum --
+version 1
+foobar
 -- uninitialized/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]
