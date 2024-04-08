@@ -28,8 +28,8 @@ jobs:
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
         go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3.24.9
+      uses: github/codeql-action/init@v3.24.10
       with:
         languages: go
     - name: Perform CodeQL analysis
-      uses: github/codeql-action/analyze@v3.24.9
+      uses: github/codeql-action/analyze@v3.24.10
