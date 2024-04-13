@@ -26,7 +26,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -offline "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /home/runner/work/_actions -no-evict -offline "$WORKFLOW:$JOB"
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3.24.9
       with:

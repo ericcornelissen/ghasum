@@ -51,6 +51,8 @@ func cmdCache(argv []string) error {
 	switch command {
 	case "clear":
 		err = c.Clear()
+	case "evict":
+		err = c.Evict()
 	case "path":
 		msg = c.Path()
 	default:
@@ -69,12 +71,14 @@ func helpCache() string {
 	return `usage: ghasum cache [flags] <command>
 
 Utilities for managing the ghasum cache. This cache is where ghasum stores and
-looks up repositories it needs to do its job.
+looks up repositories it needs to do its job. The maximum age of entries in the
+cache is 5 days, after which it will be evicted.
 
 The available commands are:
 
-    clear    Remove all data from the cache.
-    path     Show the path to the cache.
+    clear   Remove all data from the cache.
+    evict   Remove old data from the cache.
+    path    Show the path to the cache.
 
 The available flags are:
 
