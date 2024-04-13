@@ -48,6 +48,7 @@ const (
 	flagNameCache   = "cache"
 	flagNameForce   = "force"
 	flagNameNoCache = "no-cache"
+	flagNameNoEvict = "no-evict"
 	flagNameOffline = "offline"
 )
 

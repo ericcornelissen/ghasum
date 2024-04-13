@@ -16,8 +16,11 @@ package cache
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
-	"path"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 // Cache represents a cache located on the file system.
@@ -41,6 +44,36 @@ func (c *Cache) Cleanup() {
 func (c *Cache) Clear() error {
 	if err := os.RemoveAll(c.path); err != nil {
 		return fmt.Errorf("could not clear %q: %v", c.path, err)
+	}
+
+	return nil
+}
+
+// Evict removes old entries from the cache.
+func (c *Cache) Evict() error {
+	deadline := time.Now().AddDate(0, 0, -5)
+	walk := func(path string, entry fs.DirEntry, _ error) error {
+		depth := strings.Count(path, string(os.PathSeparator))
+		if depth < 2 {
+			return nil
+		}
+
+		info, err := entry.Info()
+		if err != nil {
+			return fmt.Errorf("could not get file info for %q", path)
+		}
+
+		if info.ModTime().Before(deadline) {
+			_ = os.RemoveAll(filepath.Join(c.path, path))
+			return fs.SkipDir
+		}
+
+		return fs.SkipDir
+	}
+
+	fsys := os.DirFS(c.path)
+	if err := fs.WalkDir(fsys, ".", walk); err != nil {
+		return fmt.Errorf("cache eviction failed: %v", err)
 	}
 
 	return nil
@@ -88,7 +121,7 @@ func New(location string, ephemeral bool) (Cache, error) {
 				return c, fmt.Errorf("could not get user home directory: %v", err)
 			}
 
-			c.path = path.Join(home, ".ghasum")
+			c.path = filepath.Join(home, ".ghasum")
 		} else {
 			c.path = location
 		}

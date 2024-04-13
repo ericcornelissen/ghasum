@@ -27,7 +27,7 @@ jobs:
         WORKFLOW: ${{ github.workflow_ref }}
       run: |
         WORKFLOW=$(echo "$WORKFLOW" | cut -d '@' -f 1 | cut -d '/' -f 3-5)
-        go run ./cmd/ghasum verify -cache /__w/_actions -offline "$WORKFLOW:$JOB"
+        go run ./cmd/ghasum verify -cache /__w/_actions -no-evict -offline "$WORKFLOW:$JOB"
     - name: Perform Semgrep analysis
       run: semgrep ci --sarif --output semgrep.sarif
       env:

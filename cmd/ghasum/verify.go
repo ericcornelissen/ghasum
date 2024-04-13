@@ -32,6 +32,7 @@ func cmdVerify(argv []string) error {
 		flags       = flag.NewFlagSet(cmdNameVerify, flag.ContinueOnError)
 		flagCache   = flags.String(flagNameCache, "", "")
 		flagNoCache = flags.Bool(flagNameNoCache, false, "")
+		flagNoEvict = flags.Bool(flagNameNoEvict, false, "")
 		flagOffline = flags.Bool(flagNameOffline, false, "")
 	)
 
@@ -71,6 +72,12 @@ func cmdVerify(argv []string) error {
 	c, err := cache.New(*flagCache, *flagNoCache)
 	if err != nil {
 		return errors.Join(errCache, err)
+	}
+
+	if !*flagNoEvict {
+		if evictErr := c.Evict(); evictErr != nil {
+			return errors.Join(errUnexpected, evictErr)
+		}
 	}
 
 	cfg := ghasum.Config{
@@ -135,6 +142,8 @@ The available flags are:
         Defaults to a directory named .ghasum in the user's home directory.
     -no-cache
         Disable the use of the cache. Makes the -cache flag ineffective.
+    -no-evict
+        Disable cache eviction.
     -offline
         Run without fetching repositories from the internet, verify exclusively
         against the cache. If the cache is missing an entry it causes an error.`

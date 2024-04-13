@@ -27,9 +27,10 @@ import (
 func cmdUpdate(argv []string) error {
 	var (
 		flags       = flag.NewFlagSet(cmdNameUpdate, flag.ContinueOnError)
-		flagForce   = flags.Bool(flagNameForce, false, "")
 		flagCache   = flags.String(flagNameCache, "", "")
+		flagForce   = flags.Bool(flagNameForce, false, "")
 		flagNoCache = flags.Bool(flagNameNoCache, false, "")
+		flagNoEvict = flags.Bool(flagNameNoEvict, false, "")
 	)
 
 	flags.Usage = func() { fmt.Fprintln(os.Stderr) }
@@ -54,6 +55,12 @@ func cmdUpdate(argv []string) error {
 	c, err := cache.New(*flagCache, *flagNoCache)
 	if err != nil {
 		return errors.Join(errCache, err)
+	}
+
+	if !*flagNoEvict {
+		if err := c.Evict(); err != nil {
+			return errors.Join(errUnexpected, err)
+		}
 	}
 
 	cfg := ghasum.Config{
@@ -88,5 +95,7 @@ The available flags are:
         Force updating the gha.sum file, ignoring errors and fixing them in the
         process.
     -no-cache
-        Disable the use of the cache. Makes the -cache flag ineffective.`
+        Disable the use of the cache. Makes the -cache flag ineffective.
+    -no-evict
+        Disable cache eviction.`
 }
