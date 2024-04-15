@@ -4,5 +4,5 @@ actions/checkout@v4.1.2 5uAXl352I8XStCYyGTbGN7KcAaq2TyH8pPYNxivPuJo=
 actions/setup-go@v5.0.0 lSvPPozeojJimtMLZ7cX1J/h8r1i30yGoTYQbst/jA4=
 github/codeql-action@v3.24.9 q83UOB1l3rowEsFLR9u8ikG/7Bvge6u2wgTZc3pIOD8=
 ncipollo/release-action@v1.14.0 +JAIlT/RB99JgfxlDrAcAdBnaKX4y8hyFWnHc4j7tfM=
-stefanzweifel/git-auto-commit-action@v5.0.0 t2VeG9180CmZ5/cmxvkFkN6iWoWsOjlaJ2V8rp1HDqY=
+stefanzweifel/git-auto-commit-action@v5.0.1 a0eC/Dj5cG4cJHiSBoqW5TtWaNHipwzatmhLUyBIN6g=
 tibdex/github-app-token@v2.1.0 ZNSBo6XSE0yxs8IkHEkVtUC9MkEeXTclXpMLl6zAmCs=
