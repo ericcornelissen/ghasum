@@ -26,7 +26,7 @@ require (
 	github.com/tetafro/godot v1.4.16
 	github.com/tomarrell/wrapcheck/v2 v2.8.2
 	github.com/ultraware/whitespace v0.1.0
-	gitlab.com/bosi/decorder v0.4.1
+	gitlab.com/bosi/decorder v0.4.2
 	go.uber.org/nilaway v0.0.0-20240216175439-fb8b98c43554
 	golang.org/x/tools v0.20.0
 	golang.org/x/vuln v1.1.0
