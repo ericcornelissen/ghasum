@@ -1,7 +1,7 @@
 version 1
 
 actions/checkout@v4.1.2 5uAXl352I8XStCYyGTbGN7KcAaq2TyH8pPYNxivPuJo=
-actions/setup-go@v5.0.0 lSvPPozeojJimtMLZ7cX1J/h8r1i30yGoTYQbst/jA4=
+actions/setup-go@v5.0.1 q8sUwsMBEiWR5uyTQTvyQtNFn3obLEbDMcbC4Qk1JiA=
 github/codeql-action@v3.25.3 5seND1hK03/V1v/+DnxlM/C/0sse/mE+scHnvxxpPgA=
 ncipollo/release-action@v1.14.0 +JAIlT/RB99JgfxlDrAcAdBnaKX4y8hyFWnHc4j7tfM=
 stefanzweifel/git-auto-commit-action@v5.0.0 t2VeG9180CmZ5/cmxvkFkN6iWoWsOjlaJ2V8rp1HDqY=
