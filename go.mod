@@ -11,7 +11,7 @@ require (
 	github.com/butuzov/ireturn v0.3.0
 	github.com/catenacyber/perfsprint v0.7.0
 	github.com/dkorunic/betteralign v0.4.4
-	github.com/go-critic/go-critic v0.11.2
+	github.com/go-critic/go-critic v0.11.4
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/jgautheron/goconst v1.7.0
@@ -45,7 +45,7 @@ require (
 	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/containerd/cgroups/v3 v3.0.3 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
-	github.com/cristalhq/acmd v0.11.2 // indirect
+	github.com/cristalhq/acmd v0.12.0 // indirect
 	github.com/cyphar/filepath-securejoin v0.2.4 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
