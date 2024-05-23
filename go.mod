@@ -28,8 +28,8 @@ require (
 	github.com/ultraware/whitespace v0.1.0
 	gitlab.com/bosi/decorder v0.4.1
 	go.uber.org/nilaway v0.0.0-20240216175439-fb8b98c43554
-	golang.org/x/tools v0.21.0
-	golang.org/x/vuln v1.1.0
+	golang.org/x/tools v0.21.1-0.20240514024235-59d9797072e7
+	golang.org/x/vuln v1.1.1
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.4.7
 	mvdan.cc/unparam v0.0.0-20240104100049-c549a3470d14
