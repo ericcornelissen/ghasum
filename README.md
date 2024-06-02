@@ -72,10 +72,11 @@ integrity guarantees, since they're based on the older SHA1 hash the guarantees
 are not optimal.
 
 Besides being older and having better, modern algorithms available, SHA1 is
-vulnerable to the [SHAttered] attack. This means it is possible for a motivated
-and well-funded adversary to mount an attack on the Github Actions ecosystem.
-GitHub does have [protections in place] to detect such an attack, but this is
-specific to the [SHAttered] attack and, like hashing algorithms, probabilistic.
+vulnerable to attacks, including [SHAttered] and [SHAmbles]. This means it is
+possible for a motivated and well-funded adversary to mount an attack on the
+GitHub Actions ecosystem. Note that GitHub does have [protections in place] to
+detect such attacks, but from what is publicly available this is limited to the
+[SHAttered] attack.
 
 This project is a response to that theoretical attack - providing a way to get,
 record, and validate checksums for GitHub Actions dependencies using a more
@@ -84,6 +85,18 @@ alternative to in-workflow commit SHA.
 
 [protections in place]: https://github.blog/2017-03-20-sha-1-collision-detection-on-github-com/
 [shattered]: https://shattered.io/
+[shambles]: https://sha-mbles.github.io/
+
+### Git's hash function transition
+
+The Git project has a [hash function transition] objective with the goal of
+migrating from SHA-1 to SHA-256. This discussion was started around the time of
+the SHAttered attack and has gradually been developed over time but is, as of
+writing, still experimental. The transition would eliminate the need for this
+project from a security perspective, but it could remain useful due to its other
+perks.
+
+[hash function transition]: https://git-scm.com/docs/hash-function-transition
 
 ## License
 
