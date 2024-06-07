@@ -29,7 +29,7 @@ require (
 	gitlab.com/bosi/decorder v0.4.1
 	go.uber.org/nilaway v0.0.0-20240216175439-fb8b98c43554
 	golang.org/x/tools v0.22.0
-	golang.org/x/vuln v1.1.1
+	golang.org/x/vuln v1.1.2
 	gopkg.in/yaml.v2 v2.4.0
 	honnef.co/go/tools v0.4.7
 	mvdan.cc/unparam v0.0.0-20240104100049-c549a3470d14
@@ -101,6 +101,7 @@ require (
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/telemetry v0.0.0-20240522233618-39ace7a40ae7 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.34.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
