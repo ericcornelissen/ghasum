@@ -16,7 +16,7 @@ jobs:
       image: returntocorp/semgrep
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4.1.6
+      uses: actions/checkout@v4.1.7
     - name: Install Go
       uses: actions/setup-go@v5.0.1
       with:
