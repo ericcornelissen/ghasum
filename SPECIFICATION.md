@@ -48,10 +48,11 @@ before and releases the lock. In short, updating will only add new and remove
 old checksums from an existing sumfile.
 
 With the `-force` flag the process will ignore errors in the sumfile and fix
-those while updating. If the sumfile version can still be determined from
-sumfile it will be used, otherwise the latest available version is used instead.
-This option is disabled by default to avoid unknowingly fixing syntax errors in
-a sumfile, which is an important fact to know about from a security perspective.
+those while updating. It will also update existing checksums that are incorrect.
+If the sumfile version can still be determined from sumfile it will be used,
+otherwise the latest available version is used instead. This option is disabled
+by default to avoid unknowingly fixing syntax or other errors in a sumfile,
+which is an important fact to know about from a security perspective.
 
 This process does not verify any of the checksums currently in the sumfile.
 

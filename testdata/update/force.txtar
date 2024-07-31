@@ -34,6 +34,12 @@ stdout 'Ok'
 ! stderr .
 cmp no-version/.github/workflows/gha.sum .want/gha.sum
 
+# Invalid existing sum
+exec ghasum update -cache .cache/ -force invalid-sum/
+stdout 'Ok'
+! stderr .
+cmp invalid-sum/.github/workflows/gha.sum .want/gha.sum
+
 -- duplicate/.github/workflows/gha.sum --
 version 1
 
@@ -115,6 +121,21 @@ version-header-missing 1
 
 actions/checkout@v4.1.0 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
 -- no-version/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+-- invalid-sum/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 GGAV+/JnlPt41B9iINyvcX5z6a4ue+NblmwiDNVORz0=
+-- invalid-sum/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]
 
