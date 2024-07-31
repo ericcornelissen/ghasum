@@ -145,11 +145,13 @@ func Update(cfg *Config, force bool) error {
 		return err
 	}
 
-	for i, entry := range checksums {
-		for _, oldEntry := range oldChecksums {
-			if slices.Equal(entry.ID, oldEntry.ID) {
-				checksums[i] = oldEntry
-				break
+	if !force {
+		for i, entry := range checksums {
+			for _, oldEntry := range oldChecksums {
+				if slices.Equal(entry.ID, oldEntry.ID) {
+					checksums[i] = oldEntry
+					break
+				}
 			}
 		}
 	}

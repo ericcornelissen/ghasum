@@ -92,8 +92,8 @@ The available flags are:
         looks up repositories it needs.
         Defaults to a directory named .ghasum in the user's home directory.
     -force
-        Force updating the gha.sum file, ignoring errors and fixing them in the
-        process.
+        Force updating the gha.sum file, ignoring syntax errors and fixing them
+        in the process. This also fixes any existing checksums that are wrong.
     -no-cache
         Disable the use of the cache. Makes the -cache flag ineffective.
     -no-evict
