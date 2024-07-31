@@ -44,7 +44,7 @@ func TaskAudit(t *T) error {
 // Build the ghasum binary for the current platform.
 func TaskBuild(t *T) error {
 	t.Log("Building...")
-	return t.Exec(`go build ./cmd/ghasum`)
+	return t.Exec(`go build -trimpath ./cmd/ghasum`)
 }
 
 // Build the ghasum binary for all supported platforms.
@@ -214,18 +214,23 @@ func TaskFormatCheck(t *T) error {
 // Check if the build is reproducible.
 func TaskReproducible(t *T) error {
 	var (
-		build    = "go build ./cmd/ghasum"
 		checksum = "shasum --algorithm 512 ghasum"
 	)
 
-	t.Log("Initial build...")
-	checksum1, err := t.ExecS(build, checksum)
+	if err := TaskBuild(t); err != nil {
+		return err
+	}
+
+	checksum1, err := t.ExecS(checksum)
 	if err != nil {
 		return err
 	}
 
-	t.Log("Reproducing build...")
-	checksum2, err := t.ExecS(build, checksum)
+	if err := TaskBuild(t); err != nil {
+		return err
+	}
+
+	checksum2, err := t.ExecS(checksum)
 	if err != nil {
 		return err
 	}
