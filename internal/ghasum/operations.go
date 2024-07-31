@@ -18,6 +18,7 @@ import (
 	"errors"
 	"io"
 	"io/fs"
+	"slices"
 
 	"github.com/ericcornelissen/ghasum/internal/cache"
 	"github.com/ericcornelissen/ghasum/internal/checksum"
@@ -123,6 +124,7 @@ func Update(cfg *Config, force bool) error {
 	}
 
 	version, err := version(raw)
+	oldChecksums, _ := decode(raw)
 	if err != nil {
 		if !force {
 			return errors.Join(ErrSumfileRead, err)
@@ -141,6 +143,15 @@ func Update(cfg *Config, force bool) error {
 	checksums, err := compute(cfg, actions, checksum.BestAlgo)
 	if err != nil {
 		return err
+	}
+
+	for i, entry := range checksums {
+		for _, oldEntry := range oldChecksums {
+			if slices.Equal(entry.ID, oldEntry.ID) {
+				checksums[i] = oldEntry
+				break
+			}
+		}
 	}
 
 	encoded, err := encode(version, checksums)
