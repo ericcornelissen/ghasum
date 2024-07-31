@@ -14,10 +14,32 @@ stdout 'Ok'
 ! stderr .
 cmp changed/.github/workflows/gha.sum want/gha.sum
 
+# Removal necessary
+! cmp remove/.github/workflows/gha.sum want/gha.sum
+
+exec ghasum update -cache .cache/ remove/
+stdout 'Ok'
+! stderr .
+cmp remove/.github/workflows/gha.sum want/gha.sum
+
+# Preserve existing values
+! cmp preserve/.github/workflows/gha.sum want/gha-preserve.sum
+
+exec ghasum update -cache .cache/ preserve/
+stdout 'Ok'
+! stderr .
+cmp preserve/.github/workflows/gha.sum want/gha-preserve.sum
+
 -- want/gha.sum --
 version 1
 
 actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- want/gha-preserve.sum --
+version 1
+
+actions/checkout@v4.1.1 this-is-invalid-but-should-not-be-updated
 actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
 golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
 -- unchanged/.github/workflows/gha.sum --
@@ -52,6 +74,57 @@ actions/checkout@main PKruFKnotZi8RQ196H3R7c5bgw9+mfI7BN/h0A7XiV8=
 actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
 golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
 -- changed/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- remove/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@main PKruFKnotZi8RQ196H3R7c5bgw9+mfI7BN/h0A7XiV8=
+actions/checkout@v4.1.1 KsR9XQGH7ydTl01vlD8pIZrXhkzXyjcnzhmP+/KaJZI=
+actions/setup-go@v5.0.0 7lPZupz84sSI3T+PiaMr/ML3XPqJaEo7dMaPsQUnM6c=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- remove/.github/workflows/workflow.yml --
+name: Example workflow
+on: [push]
+
+jobs:
+  example:
+    name: example
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+    - name: Install Go
+      uses: actions/setup-go@v5.0.0
+      with:
+        go-version-file: go.mod
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a91952
+    - name: This step does not use an action
+      run: Echo 'hello world!'
+-- preserve/.github/workflows/gha.sum --
+version 1
+
+actions/checkout@v4.1.1 this-is-invalid-but-should-not-be-updated
+actions/setup-go@v4.1.0 RQ197c5MRKiujfm0VpQ19p7BN/07XFW9H3R7GH36RXi=
+golangci/golangci-lint-action@3a91952 CVRgC7gGqkOiujfm0VMRKppg/Ztv8FW9GYmyJzcwlCI=
+-- preserve/.github/workflows/workflow.yml --
 name: Example workflow
 on: [push]
 
