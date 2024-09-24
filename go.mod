@@ -22,12 +22,13 @@ require (
 	github.com/nishanths/exhaustive v0.12.0
 	github.com/polyfloyd/go-errorlint v1.5.0
 	github.com/remyoudompheng/go-misc v0.0.0-20190427085024-2d6ac652a50e
-	github.com/rogpeppe/go-internal v1.12.0
+	github.com/rogpeppe/go-internal v1.13.1
 	github.com/tetafro/godot v1.4.16
 	github.com/tomarrell/wrapcheck/v2 v2.9.0
 	github.com/ultraware/whitespace v0.1.0
 	gitlab.com/bosi/decorder v0.4.1
 	go.uber.org/nilaway v0.0.0-20240216175439-fb8b98c43554
+	golang.org/x/mod v0.21.0
 	golang.org/x/tools v0.25.0
 	golang.org/x/vuln v1.1.1
 	gopkg.in/yaml.v2 v2.4.0
@@ -97,7 +98,6 @@ require (
 	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
 	golang.org/x/exp/typeparams v0.0.0-20240213143201-ec583247a57a // indirect
-	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
