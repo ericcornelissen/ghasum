@@ -17,7 +17,7 @@ package checksum
 import (
 	"fmt"
 
-	"github.com/rogpeppe/go-internal/dirhash"
+	"golang.org/x/mod/sumdb/dirhash"
 )
 
 // Algo represents a cryptographic hash algorithm.
