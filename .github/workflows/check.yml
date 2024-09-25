@@ -10,7 +10,7 @@ permissions: read-all
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4.1.6
@@ -29,7 +29,7 @@ jobs:
       run: go run tasks.go build
   dogfeed:
     name: Dogfeed
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
     - test
     steps:
@@ -54,7 +54,7 @@ jobs:
         go run ./cmd/ghasum verify
   format:
     name: Format
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
     - build
     steps:
@@ -75,7 +75,7 @@ jobs:
       run: go run tasks.go format-check
   reproducible:
     name: Reproducible build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
     - build
     steps:
@@ -96,7 +96,7 @@ jobs:
       run: go run tasks.go reproducible
   test:
     name: Test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
     - build
     steps:
@@ -117,7 +117,7 @@ jobs:
       run: go run tasks.go coverage
   vet:
     name: Vet
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
     - build
     steps:
