@@ -11,7 +11,7 @@ require (
 	github.com/butuzov/ireturn v0.3.0
 	github.com/catenacyber/perfsprint v0.7.0
 	github.com/dkorunic/betteralign v0.5.1
-	github.com/go-critic/go-critic v0.11.4
+	github.com/go-critic/go-critic v0.11.5
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/gordonklaus/ineffassign v0.1.0
 	github.com/jgautheron/goconst v1.7.0
